@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,8 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import ru.liko.wrbbasemod.Wrbbasemod;
 import ru.liko.wrbbasemod.common.item.ModItems;
-import ru.liko.wrbbasemod.common.player.WrbPlayerData;
-import ru.liko.wrbbasemod.common.player.WrbPlayerDataProvider;
 
 @Mod.EventBusSubscriber(modid = Wrbbasemod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HudOverlay {
@@ -42,12 +41,14 @@ private static final int DEG_CLR    = 0xFFB8C5B0;   // цифры (приглу�
         if (!e.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id())) return;
         LocalPlayer pl = Minecraft.getInstance().player;
         if (pl == null || Minecraft.getInstance().options.hideGui) return;
-        boolean compassActive = pl.getCapability(WrbPlayerDataProvider.WRB_PLAYER_DATA_CAPABILITY)
-                .map(WrbPlayerData::isCompassActive)
-                .orElse(false);
-        // Проверяем наличие КПК в инвентаре или руках
-        boolean hasPda = hasMilitaryPDA(pl);
-        if (!compassActive || !hasPda) return;
+        
+        // Находим КПК в инвентаре и проверяем его NBT тег Enabled
+        ItemStack pdaStack = findMilitaryPDA(pl);
+        if (pdaStack.isEmpty()) return;
+        
+        // Проверяем NBT тег Enabled напрямую
+        boolean pdaEnabled = pdaStack.hasTag() && pdaStack.getTag().getBoolean("Enabled");
+        if (!pdaEnabled) return;
 
         GuiGraphics g = e.getGuiGraphics();
         int sw = e.getWindow().getGuiScaledWidth();
@@ -116,27 +117,29 @@ private static final int DEG_CLR    = 0xFFB8C5B0;   // цифры (приглу�
     }
     
     /**
-     * Проверяет наличие Military PDA в инвентаре игрока
+     * Находит Military PDA в инвентаре игрока и возвращает его
+     * Если КПК не найден, возвращает ItemStack.EMPTY
      */
-    private static boolean hasMilitaryPDA(LocalPlayer player) {
+    private static ItemStack findMilitaryPDA(LocalPlayer player) {
         // Проверяем основную руку
         if (player.getMainHandItem().is(ModItems.MILITARY_PDA.get())) {
-            return true;
+            return player.getMainHandItem();
         }
         
         // Проверяем вторую руку
         if (player.getOffhandItem().is(ModItems.MILITARY_PDA.get())) {
-            return true;
+            return player.getOffhandItem();
         }
         
         // Проверяем инвентарь (включая хотбар и основной инвентарь)
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            if (player.getInventory().getItem(i).is(ModItems.MILITARY_PDA.get())) {
-                return true;
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.is(ModItems.MILITARY_PDA.get())) {
+                return stack;
             }
         }
         
-        return false;
+        return ItemStack.EMPTY;
     }
 
     /* рисуем равнобедренный треугольник вверх */
