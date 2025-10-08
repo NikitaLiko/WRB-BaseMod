@@ -6,6 +6,7 @@
   "commands.wrb.rank.unknown": "Неизвестное звание: %s",
   "commands.wrb.rank.player_not_found": "Игрок %s не найден на сервере",
   "commands.wrb.rank.no_permission": "У вас нет прав для выполнения этой команды",
+  "commands.wrb.rank.ambiguous": "Неоднозначная команда. Используйте: /wrb rank %s <игрок> <звание>",
   "commands.wrb.rank.promotion_required": "Новое звание должно быть выше текущего",
   "commands.wrb.rank.demotion_required": "Новое звание должно быть ниже текущего",
   "commands.wrb.rank.changed": "Звание игрока %s изменено на",
