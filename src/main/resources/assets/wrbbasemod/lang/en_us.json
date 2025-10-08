@@ -1,5 +1,25 @@
 {
   "item.wrbbasemod.military_pda": "Military PDA",
   "item.wrbbasemod.military_pda.tooltip.enabled": "PDA on",
-  "item.wrbbasemod.military_pda.tooltip.disabled": "PDA off"
+  "item.wrbbasemod.military_pda.tooltip.disabled": "PDA off",
+
+  "commands.wrb.rank.unknown": "Unknown rank: %s",
+  "commands.wrb.rank.player_not_found": "Player %s not found on server",
+  "commands.wrb.rank.no_permission": "You don't have permission to execute this command",
+  "commands.wrb.rank.promotion_required": "New rank must be higher than current",
+  "commands.wrb.rank.demotion_required": "New rank must be lower than current",
+  "commands.wrb.rank.changed": "Player %s rank changed to",
+  "commands.wrb.rank.self_changed": "Your rank changed to",
+
+  "commands.wrb.rank.up.description": "Promote player rank",
+  "commands.wrb.rank.down.description": "Demote player rank",
+  "commands.wrb.rank.up.self.description": "Promote your rank",
+  "commands.wrb.rank.down.self.description": "Demote your rank",
+
+  "commands.wrb.rank.help.header": "=== Rank Commands Help ===",
+  "commands.wrb.rank.help.up_self": "/wrb rank up <rank> - Promote your rank",
+  "commands.wrb.rank.help.up_other": "/wrb rank up <player> <rank> - Promote player rank",
+  "commands.wrb.rank.help.down_self": "/wrb rank down <rank> - Demote your rank", 
+  "commands.wrb.rank.help.down_other": "/wrb rank down <player> <rank> - Demote player rank",
+  "commands.wrb.rank.help.available_ranks": "Available ranks:"
 }
