@@ -1,6 +1,5 @@
 package ru.liko.wrbbasemod.client.gui.overlay;
 
-import ru.liko.wrbbasemod.Wrbbasemod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
@@ -11,23 +10,29 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Wrbbasemod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+import ru.liko.wrbbasemod.Wrbbasemod;
+import ru.liko.wrbbasemod.common.item.ModItems;
+import ru.liko.wrbbasemod.common.player.WrbPlayerData;
+import ru.liko.wrbbasemod.common.player.WrbPlayerDataProvider;
+
+@Mod.EventBusSubscriber(modid = Wrbbasemod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HudOverlay {
 
-    // Палитра WW I (латунь + патина)
-    private static final int TICK_MAIN  = 0xFF8B7355;   // крупные деления
-    private static final int TICK_SUB   = 0xFFB8860B;   // мелкие деления
-    private static final int DIR_MAIN   = 0xFFFFFFFF;   // N E S W
-    private static final int DIR_SUB    = 0xFFEBD98A;   // NE SE SW NW
-    private static final int NORTH_CLR  = 0xFFD2691E;   // выделенный «N»
-    private static final int POINTER_CLR= 0xFFFFFFFF;   // линия + стрелка
-    private static final int DEG_CLR    = 0xFFCCCCCC;   // цифры
+// Современная милитари-палитра (tactical/HUD style)
+private static final int TICK_MAIN  = 0xFF6B705C;   // крупные деления (olive drab темный)
+private static final int TICK_SUB   = 0xFF8B9080;   // мелкие деления (приглушённый olive)
+private static final int DIR_MAIN   = 0xFFCED4B3;   // N E S W (tactical tan/desert sand)
+private static final int DIR_SUB    = 0xFF9FA590;   // NE SE SW NW (sage green)
+private static final int NORTH_CLR  = 0xFFFF4444;   // выделенный «N» (тактический красный NATO)
+private static final int POINTER_CLR= 0xFF00FF00;   // линия + стрелка (ярко-зелёный HUD)
+private static final int DEG_CLR    = 0xFFB8C5B0;   // цифры (приглушённый светлый)
 
-    // Геометрия (как в HLL)
+
+    // Геометрия
     private static final int WIDTH  = 300;
     private static final int HEIGHT = 25;
     private static final int TOP    = 10;
-    private static final float SCALE = 2.2f;
+    private static final float SCALE = 2.0f;
 
     private static float smYaw;
     private static long  last;
@@ -37,6 +42,12 @@ public class HudOverlay {
         if (!e.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id())) return;
         LocalPlayer pl = Minecraft.getInstance().player;
         if (pl == null || Minecraft.getInstance().options.hideGui) return;
+        boolean compassActive = pl.getCapability(WrbPlayerDataProvider.WRB_PLAYER_DATA_CAPABILITY)
+                .map(WrbPlayerData::isCompassActive)
+                .orElse(false);
+        boolean hasPda = pl.getInventory().contains(ModItems.MILITARY_PDA.get().getDefaultInstance())
+                || pl.getOffhandItem().is(ModItems.MILITARY_PDA.get());
+        if (!compassActive || !hasPda) return;
 
         GuiGraphics g = e.getGuiGraphics();
         int sw = e.getWindow().getGuiScaledWidth();
