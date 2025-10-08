@@ -45,8 +45,8 @@ private static final int DEG_CLR    = 0xFFB8C5B0;   // цифры (приглу�
         boolean compassActive = pl.getCapability(WrbPlayerDataProvider.WRB_PLAYER_DATA_CAPABILITY)
                 .map(WrbPlayerData::isCompassActive)
                 .orElse(false);
-        boolean hasPda = pl.getInventory().contains(ModItems.MILITARY_PDA.get().getDefaultInstance())
-                || pl.getOffhandItem().is(ModItems.MILITARY_PDA.get());
+        // Проверяем наличие КПК в инвентаре или руках
+        boolean hasPda = hasMilitaryPDA(pl);
         if (!compassActive || !hasPda) return;
 
         GuiGraphics g = e.getGuiGraphics();
@@ -113,6 +113,30 @@ private static final int DEG_CLR    = 0xFFB8C5B0;   // цифры (приглу�
     String bs = String.format("%03d", b);
         int tw = f.width(bs);
         g.drawString(f, bs, cx - tw/2, bot + 3, DIR_MAIN);
+    }
+    
+    /**
+     * Проверяет наличие Military PDA в инвентаре игрока
+     */
+    private static boolean hasMilitaryPDA(LocalPlayer player) {
+        // Проверяем основную руку
+        if (player.getMainHandItem().is(ModItems.MILITARY_PDA.get())) {
+            return true;
+        }
+        
+        // Проверяем вторую руку
+        if (player.getOffhandItem().is(ModItems.MILITARY_PDA.get())) {
+            return true;
+        }
+        
+        // Проверяем инвентарь (включая хотбар и основной инвентарь)
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            if (player.getInventory().getItem(i).is(ModItems.MILITARY_PDA.get())) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /* рисуем равнобедренный треугольник вверх */

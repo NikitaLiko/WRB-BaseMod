@@ -3,6 +3,9 @@ package ru.liko.wrbbasemod.common.item;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +31,7 @@ import ru.liko.wrbbasemod.common.network.packet.SyncWrbDataPacket;
 import ru.liko.wrbbasemod.common.player.WrbPlayerDataProvider;
 
 public class MilitaryPdaItem extends Item implements GeoItem {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MilitaryPdaItem.class);
 
     // NBT Tags
     private static final String NBT_ENABLED = "Enabled";
@@ -60,8 +64,13 @@ public class MilitaryPdaItem extends Item implements GeoItem {
                 updateNBT(stack, player, newState);
                 
                 if (player instanceof ServerPlayer serverPlayer) {
+                    // Отправляем пакет синхронизации клиенту
                     WrbNetworking.sendToClient(new SyncWrbDataPacket(data), serverPlayer);
+                    // Отображаем сообщение о состоянии
                     player.displayClientMessage(newState ? ENABLED_MSG : DISABLED_MSG, true);
+                    
+                    // Дополнительная отладка для проверки синхронизации
+                    LOGGER.debug("Military PDA toggled: {} for player {}", newState ? "ON" : "OFF", player.getName().getString());
                 }
             });
             player.awardStat(Stats.ITEM_USED.get(this));
