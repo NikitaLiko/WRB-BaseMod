@@ -73,13 +73,26 @@ public final class WrbCommands {
                 // Приоритетная команда: /wrb rank up <player> <rank>
                 .then(Commands.argument("target", StringArgumentType.word())
                         .suggests(ONLINE_PLAYER_SUGGESTIONS)
-                        .then(Commands.argument("rank", StringArgumentType.string())
+                        .then(Commands.argument("rank", StringArgumentType.greedyString())
                                 .suggests(RANK_SUGGESTIONS)
                                 .executes(ctx -> executeRankChangeByName(ctx, StringArgumentType.getString(ctx, "target"), StringArgumentType.getString(ctx, "rank"), promotion))))
-                // Команда для себя: /wrb rank up <rank>
-                .then(Commands.argument("rank", StringArgumentType.string())
+                // Команда для себя: /wrb rank up <rank> (только если нет конфликта с именами игроков)
+                .then(Commands.argument("rank", StringArgumentType.greedyString())
                         .suggests(RANK_SUGGESTIONS)
-                        .executes(ctx -> executeRankChange(ctx, ctx.getSource().getPlayerOrException(), StringArgumentType.getString(ctx, "rank"), promotion)));
+                        .executes(ctx -> {
+                            // Проверяем, не является ли это именем игрока
+                            String rankStr = StringArgumentType.getString(ctx, "rank");
+                            CommandSourceStack source = ctx.getSource();
+
+                            // Если есть игрок с таким именем, показываем ошибку
+                            ServerPlayer possiblePlayer = source.getServer().getPlayerList().getPlayerByName(rankStr);
+                            if (possiblePlayer != null) {
+                                source.sendFailure(Component.translatable("commands.wrb.rank.ambiguous", literal));
+                                return 0;
+                            }
+
+                            return executeRankChange(ctx, source.getPlayerOrException(), rankStr, promotion);
+                        }));
     }
 
     private static int executeRankChangeByName(CommandContext<CommandSourceStack> ctx, String targetName, String rawRank, boolean promotion) throws CommandSyntaxException {

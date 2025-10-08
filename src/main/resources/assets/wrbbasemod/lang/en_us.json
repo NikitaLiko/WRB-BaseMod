@@ -6,6 +6,7 @@
   "commands.wrb.rank.unknown": "Unknown rank: %s",
   "commands.wrb.rank.player_not_found": "Player %s not found on server",
   "commands.wrb.rank.no_permission": "You don't have permission to execute this command",
+  "commands.wrb.rank.ambiguous": "Ambiguous command. Use: /wrb rank %s <player> <rank>",
   "commands.wrb.rank.promotion_required": "New rank must be higher than current",
   "commands.wrb.rank.demotion_required": "New rank must be lower than current",
   "commands.wrb.rank.changed": "Player %s rank changed to",
