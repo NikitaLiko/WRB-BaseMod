@@ -1,0 +1,5 @@
+{
+  "item.wrbbasemod.military_pda": "Военный КПК",
+  "item.wrbbasemod.military_pda.tooltip.enabled": "КПК включен",
+  "item.wrbbasemod.military_pda.tooltip.disabled": "КПК выключен"
+}
