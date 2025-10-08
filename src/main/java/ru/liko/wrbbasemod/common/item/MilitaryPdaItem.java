@@ -33,9 +33,6 @@ public class MilitaryPdaItem extends Item implements GeoItem {
     private static final String NBT_ENABLED = "Enabled";
     private static final String NBT_OWNER = "Owner";
     private static final String NBT_OWNER_UUID = "OwnerUUID";
-    private static final String NBT_USAGE_COUNT = "UsageCount";
-    private static final String NBT_LAST_USED = "LastUsed";
-    private static final String NBT_CREATED_TIME = "CreatedTime";
 
     private static final Component ENABLED_MSG = Component.translatable("item.wrbbasemod.military_pda.tooltip.enabled").withStyle(ChatFormatting.GREEN);
     private static final Component DISABLED_MSG = Component.translatable("item.wrbbasemod.military_pda.tooltip.disabled").withStyle(ChatFormatting.RED);
@@ -78,20 +75,10 @@ public class MilitaryPdaItem extends Item implements GeoItem {
     private void initializeNBT(ItemStack stack, Player player) {
         CompoundTag tag = stack.getOrCreateTag();
         
-        // Устанавливаем время создания, если его нет
-        if (!tag.contains(NBT_CREATED_TIME)) {
-            tag.putLong(NBT_CREATED_TIME, System.currentTimeMillis());
-        }
-        
         // Устанавливаем владельца, если его нет
         if (!tag.contains(NBT_OWNER)) {
             tag.putString(NBT_OWNER, player.getName().getString());
             tag.putString(NBT_OWNER_UUID, player.getStringUUID());
-        }
-        
-        // Инициализируем счетчик использований
-        if (!tag.contains(NBT_USAGE_COUNT)) {
-            tag.putInt(NBT_USAGE_COUNT, 0);
         }
         
         // Устанавливаем начальное состояние
@@ -108,13 +95,6 @@ public class MilitaryPdaItem extends Item implements GeoItem {
         
         // Обновляем состояние
         tag.putBoolean(NBT_ENABLED, enabled);
-        
-        // Увеличиваем счетчик использований
-        int usageCount = tag.getInt(NBT_USAGE_COUNT);
-        tag.putInt(NBT_USAGE_COUNT, usageCount + 1);
-        
-        // Обновляем время последнего использования
-        tag.putLong(NBT_LAST_USED, System.currentTimeMillis());
         
         // Обновляем владельца (на случай если КПК передали другому игроку)
         tag.putString(NBT_OWNER, player.getName().getString());
@@ -137,14 +117,6 @@ public class MilitaryPdaItem extends Item implements GeoItem {
         return tag != null && tag.contains(NBT_OWNER) ? tag.getString(NBT_OWNER) : "Unknown";
     }
     
-    /**
-     * Получает количество использований из NBT
-     */
-    public static int getUsageCount(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        return tag != null ? tag.getInt(NBT_USAGE_COUNT) : 0;
-    }
-    
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
@@ -164,44 +136,11 @@ public class MilitaryPdaItem extends Item implements GeoItem {
                         .append(Component.literal(tag.getString(NBT_OWNER)).withStyle(ChatFormatting.AQUA)));
             }
             
-            // Показываем количество использований в расширенном режиме
-            if (isAdvanced.isAdvanced()) {
-                int usageCount = tag.getInt(NBT_USAGE_COUNT);
-                tooltipComponents.add(Component.translatable("item.wrbbasemod.military_pda.tooltip.usage_count")
-                        .append(": ")
-                        .append(Component.literal(String.valueOf(usageCount)).withStyle(ChatFormatting.GRAY)));
-                
-                // Показываем время создания
-                if (tag.contains(NBT_CREATED_TIME)) {
-                    long createdTime = tag.getLong(NBT_CREATED_TIME);
-                    long currentTime = System.currentTimeMillis();
-                    long ageInSeconds = (currentTime - createdTime) / 1000;
-                    tooltipComponents.add(Component.translatable("item.wrbbasemod.military_pda.tooltip.age")
-                            .append(": ")
-                            .append(Component.literal(formatTime(ageInSeconds)).withStyle(ChatFormatting.GRAY)));
-                }
-                
-                // Показываем UUID владельца для отладки
-                if (tag.contains(NBT_OWNER_UUID)) {
-                    tooltipComponents.add(Component.literal("UUID: " + tag.getString(NBT_OWNER_UUID))
-                            .withStyle(ChatFormatting.DARK_GRAY));
-                }
+            // Показываем UUID владельца для отладки в расширенном режиме
+            if (isAdvanced.isAdvanced() && tag.contains(NBT_OWNER_UUID)) {
+                tooltipComponents.add(Component.literal("UUID: " + tag.getString(NBT_OWNER_UUID))
+                        .withStyle(ChatFormatting.DARK_GRAY));
             }
-        }
-    }
-    
-    /**
-     * Форматирует время в читаемый вид
-     */
-    private String formatTime(long seconds) {
-        if (seconds < 60) {
-            return seconds + "s";
-        } else if (seconds < 3600) {
-            return (seconds / 60) + "m";
-        } else if (seconds < 86400) {
-            return (seconds / 3600) + "h";
-        } else {
-            return (seconds / 86400) + "d";
         }
     }
 
