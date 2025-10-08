@@ -1,7 +1,11 @@
 {
   "item.wrbbasemod.military_pda": "Military PDA",
-  "item.wrbbasemod.military_pda.tooltip.enabled": "PDA on",
-  "item.wrbbasemod.military_pda.tooltip.disabled": "PDA off",
+  "item.wrbbasemod.military_pda.tooltip.enabled": "Enabled",
+  "item.wrbbasemod.military_pda.tooltip.disabled": "Disabled",
+  "item.wrbbasemod.military_pda.tooltip.status": "Status",
+  "item.wrbbasemod.military_pda.tooltip.owner": "Owner",
+  "item.wrbbasemod.military_pda.tooltip.usage_count": "Usage Count",
+  "item.wrbbasemod.military_pda.tooltip.age": "Age",
 
   "commands.wrb.rank.unknown": "Unknown rank: %s",
   "commands.wrb.rank.player_not_found": "Player %s not found on server",

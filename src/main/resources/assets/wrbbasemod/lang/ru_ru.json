@@ -1,7 +1,11 @@
 {
   "item.wrbbasemod.military_pda": "Военный КПК",
-  "item.wrbbasemod.military_pda.tooltip.enabled": "КПК включен",
-  "item.wrbbasemod.military_pda.tooltip.disabled": "КПК выключен",
+  "item.wrbbasemod.military_pda.tooltip.enabled": "Включен",
+  "item.wrbbasemod.military_pda.tooltip.disabled": "Выключен",
+  "item.wrbbasemod.military_pda.tooltip.status": "Статус",
+  "item.wrbbasemod.military_pda.tooltip.owner": "Владелец",
+  "item.wrbbasemod.military_pda.tooltip.usage_count": "Использований",
+  "item.wrbbasemod.military_pda.tooltip.age": "Возраст",
 
   "commands.wrb.rank.unknown": "Неизвестное звание: %s",
   "commands.wrb.rank.player_not_found": "Игрок %s не найден на сервере",
