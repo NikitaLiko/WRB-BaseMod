@@ -1,5 +1,25 @@
 {
   "item.wrbbasemod.military_pda": "Военный КПК",
   "item.wrbbasemod.military_pda.tooltip.enabled": "КПК включен",
-  "item.wrbbasemod.military_pda.tooltip.disabled": "КПК выключен"
+  "item.wrbbasemod.military_pda.tooltip.disabled": "КПК выключен",
+
+  "commands.wrb.rank.unknown": "Неизвестное звание: %s",
+  "commands.wrb.rank.player_not_found": "Игрок %s не найден на сервере",
+  "commands.wrb.rank.no_permission": "У вас нет прав для выполнения этой команды",
+  "commands.wrb.rank.promotion_required": "Новое звание должно быть выше текущего",
+  "commands.wrb.rank.demotion_required": "Новое звание должно быть ниже текущего",
+  "commands.wrb.rank.changed": "Звание игрока %s изменено на",
+  "commands.wrb.rank.self_changed": "Ваше звание изменено на",
+
+  "commands.wrb.rank.up.description": "Повысить звание игрока",
+  "commands.wrb.rank.down.description": "Понизить звание игрока",
+  "commands.wrb.rank.up.self.description": "Повысить своё звание",
+  "commands.wrb.rank.down.self.description": "Понизить своё звание",
+
+  "commands.wrb.rank.help.header": "=== Помощь по командам званий ===",
+  "commands.wrb.rank.help.up_self": "/wrb rank up <звание> - Повысить своё звание",
+  "commands.wrb.rank.help.up_other": "/wrb rank up <игрок> <звание> - Повысить звание игрока",
+  "commands.wrb.rank.help.down_self": "/wrb rank down <звание> - Понизить своё звание", 
+  "commands.wrb.rank.help.down_other": "/wrb rank down <игрок> <звание> - Понизить звание игрока",
+  "commands.wrb.rank.help.available_ranks": "Доступные звания:"
 }
