@@ -34,7 +34,6 @@ public class MilitaryPdaItem extends Item implements GeoItem {
     private static final String NBT_OWNER = "Owner";
     private static final String NBT_OWNER_UUID = "OwnerUUID";
     private static final String NBT_USAGE_COUNT = "UsageCount";
-    private static final String NBT_LAST_USED = "LastUsed";
     private static final String NBT_CREATED_TIME = "CreatedTime";
 
     private static final Component ENABLED_MSG = Component.translatable("item.wrbbasemod.military_pda.tooltip.enabled").withStyle(ChatFormatting.GREEN);
@@ -112,9 +111,6 @@ public class MilitaryPdaItem extends Item implements GeoItem {
         // Увеличиваем счетчик использований
         int usageCount = tag.getInt(NBT_USAGE_COUNT);
         tag.putInt(NBT_USAGE_COUNT, usageCount + 1);
-        
-        // Обновляем время последнего использования
-        tag.putLong(NBT_LAST_USED, System.currentTimeMillis());
         
         // Обновляем владельца (на случай если КПК передали другому игроку)
         tag.putString(NBT_OWNER, player.getName().getString());
